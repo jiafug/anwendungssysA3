@@ -12,15 +12,24 @@ public class TestClient {
 
 		HttpResponse<JsonNode> response = Unirest.get("http://localhost:7878/meters").asJson();
 		Unirest.post("http://localhost:8080/smartmeter").field("smartmeter", response.getBody().getObject()).asJson();
-		
-		
-		//Calculates the average strength of an electric current in amperes
+
+		HttpResponse<JsonNode> metric1 = Unirest.get("http://localhost:7878/meters/ise1224hi5630/").asJson();
+		HttpResponse<JsonNode> metric2 = Unirest.get("http://localhost:7878/meters/ise1224hi5631/").asJson();
+		HttpResponse<JsonNode> metric3 = Unirest.get("http://localhost:7878/meters/ise1224hi5632/").asJson();
+		Unirest.post("http://localhost:8080/smartmeter/ise1224hi5630").field("measurand", metric1.getBody().getArray())
+				.asJson();
+		Unirest.post("http://localhost:8080/smartmeter/ise1224hi5631").field("measurand", metric2.getBody().getArray())
+				.asJson();
+		Unirest.post("http://localhost:8080/smartmeter/ise1224hi5632").field("measurand", metric3.getBody().getArray())
+				.asJson();
+
+		// Calculates the average strength of an electric current in amperes
 		double avg = 0;
 		for (int i = 0; i < 1000; i++) {
-			HttpResponse<JsonNode> response2 = Unirest.get("http://localhost:7878/meters/ise1224hi5632/data").asJson();
-			avg += (Double)response2.getBody().getObject().getJSONArray("measurements").getJSONObject(0).get("value");
+			HttpResponse<JsonNode> response3 = Unirest.get("http://localhost:7878/meters/ise1224hi5632/data").asJson();
+			avg += (Double) response3.getBody().getObject().getJSONArray("measurements").getJSONObject(0).get("value");
 		}
-		double result = avg/1000;
+		double result = avg / 1000;
 		System.out.println("Durchschnittliche Stromstärke: " + result + " Current(mA)");
 
 	}

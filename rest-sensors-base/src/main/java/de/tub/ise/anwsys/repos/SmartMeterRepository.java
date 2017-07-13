@@ -6,6 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import de.tub.ise.anwsys.models.SmartMeter;
 
-public interface SmartMeterRepository extends CrudRepository<SmartMeter, String>{
+public interface SmartMeterRepository extends CrudRepository<SmartMeter, String> {
 	List<SmartMeter> findAll();
+
+	SmartMeter findByName(String smartmeter);
 }

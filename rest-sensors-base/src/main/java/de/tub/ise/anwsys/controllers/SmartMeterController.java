@@ -1,5 +1,6 @@
 package de.tub.ise.anwsys.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
@@ -20,8 +21,12 @@ public class SmartMeterController {
 	SmartMeterRepository repository;
 
 	@RequestMapping(method = RequestMethod.GET, path = "/smartmeter")
-	public List<SmartMeter> answer() {
-		return repository.findAll();
+	public List<String> answer() {
+		List<SmartMeter> list = repository.findAll();
+		List<String> nameList = new ArrayList<String>();
+		for (SmartMeter sm : list)
+			nameList.add(sm.getName());
+		return nameList;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, path = "/smartmeter")
@@ -31,7 +36,6 @@ public class SmartMeterController {
 			SmartMeter sm = new SmartMeter(name);
 			repository.save(sm);
 		}
-		answer();
 	}
 
 }
