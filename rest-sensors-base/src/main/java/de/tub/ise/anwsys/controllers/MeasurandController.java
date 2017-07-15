@@ -34,11 +34,10 @@ public class MeasurandController {
 			throws JSONException {
 		for (int i = 0; i < measurand.length(); i++) {
 			String metricId = measurand.getJSONObject(i).getString("metricId").toString();
-			String metricText = measurand.getJSONObject(i).getString("metricText").toString();
 			Measurand m;
 			SmartMeter sm = smRepository.findByName(smartmeter);
 			if (repository.findByMetricId(metricId) == null) {
-				m = new Measurand(metricId, metricText, sm);
+				m = new Measurand(metricId, sm);
 			} else {
 				m = repository.findByMetricId(metricId);
 				m.addToSmartMeterList(sm);

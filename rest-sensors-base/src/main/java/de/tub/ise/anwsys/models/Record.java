@@ -15,6 +15,7 @@ public class Record implements Serializable {
 	private static final long serialVersionUID = 2831438593938521629L;
 
 	private int id;
+	private int time; ///second since epoch
 	private Measurand measurand;
 	private double value;
 	private SmartMeter smartmeter;
@@ -23,9 +24,11 @@ public class Record implements Serializable {
 		// empty constructor required by JPA
 	}
 
-	public Record(Measurand measurand, double value) {
+	public Record(Measurand measurand, double value, int time, SmartMeter smartmeter) {
 		this.measurand = measurand;
+		this.time=time;
 		this.value = value;
+		this.smartmeter=smartmeter;
 	}
 
 	@Id
@@ -63,10 +66,18 @@ public class Record implements Serializable {
 	public void setSmartmeter(SmartMeter smartmeter) {
 		this.smartmeter = smartmeter;
 	}
+	
+	public void setSmartmeterName(String smartmetername) {
+		this.smartmeter.setName(smartmetername);
+	}
 
 	@Override
 	public String toString() {
 		return this.id + "";
+	}
+
+	public String getSmartmeterName() {
+		return this.smartmeter.getName();
 	}
 
 }

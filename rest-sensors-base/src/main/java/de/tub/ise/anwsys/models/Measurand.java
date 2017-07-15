@@ -14,16 +14,14 @@ public class Measurand implements Serializable {
 	private static final long serialVersionUID = 3501450469684231867L;
 
 	private String metricId;
-	private String metricText;
 	private List<SmartMeter> smartmeter = new ArrayList<SmartMeter>();
 
 	protected Measurand() {
 		// empty constructor required by JPA
 	}
 
-	public Measurand(String metricId, String metricText, SmartMeter smartmeter) {
+	public Measurand(String metricId, SmartMeter smartmeter) {
 		this.metricId = metricId;
-		this.metricText = metricText;
 		this.smartmeter.add(smartmeter);
 	}
 
@@ -35,15 +33,7 @@ public class Measurand implements Serializable {
 	public void setMetricId(String name) {
 		this.metricId = name;
 	}
-
-	public String getMetricText() {
-		return metricText;
-	}
-
-	public void setMetricText(String metricText) {
-		this.metricText = metricText;
-	}
-
+	
 	@ManyToMany
 	public List<SmartMeter> getSmartmeter() {
 		return smartmeter;
