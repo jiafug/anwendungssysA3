@@ -57,6 +57,10 @@ public class RecordController {
 	    SmartMeter smartmeter=smartmeter_repository.findByName(smartmetername);
 	    double value = record.getDouble("value");
 	    int time = record.getInt("time");
+	    System.out.println(measurand);
+	    System.out.println(value);
+	    System.out.println(time);
+	    System.out.println(smartmeter);
 	    Record r = new Record(measurand,value,time,smartmeter);
 	    repository.save(r);
 	}
