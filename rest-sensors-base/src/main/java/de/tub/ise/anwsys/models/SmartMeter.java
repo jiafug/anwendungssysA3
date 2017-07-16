@@ -1,6 +1,7 @@
 package de.tub.ise.anwsys.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -14,8 +15,8 @@ public class SmartMeter implements Serializable {
 	private static final long serialVersionUID = -6640481949420444264L;
 
 	private String name;
-	private List<Measurand> measurand;
-	private List<Record> record;
+	private List<Measurand> measurand = new ArrayList<Measurand>();
+	private List<Record> record = new ArrayList<Record>();
 
 	protected SmartMeter() {
 		// empty constructor required by JPA

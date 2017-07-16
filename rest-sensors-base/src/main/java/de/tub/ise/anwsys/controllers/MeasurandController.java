@@ -1,6 +1,8 @@
 package de.tub.ise.anwsys.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,23 +26,42 @@ public class MeasurandController {
 	@Autowired
 	SmartMeterRepository smRepository;
 
+	/**
+	 * gets a map of all measurands of a smart meter
+	 * 
+	 * @param smartmeter
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/smartmeter/{smartmeter}")
-	public List<Measurand> answer(@PathVariable String smartmeter) {
-		return repository.findBySmartmeter(smRepository.findByName(smartmeter));
+	public Map<String, String> getAllMeasurands(@PathVariable String smartmeter) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		List<Measurand> list = repository.findBySmartmeter(smRepository.findByName(smartmeter));
+		for (Measurand m : list) {
+			map.put(m.getMetricId(), m.getMetricText());
+		}
+		return map;
 	}
 
+	/**
+	 * creates a new measurand or adds a measurand to a smart meter
+	 * 
+	 * @param smartmeter
+	 * @param measurand
+	 * @throws JSONException
+	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/smartmeter/{smartmeter}")
 	public void createMeasurand(@PathVariable String smartmeter, @RequestParam(value = "measurand") JSONArray measurand)
 			throws JSONException {
 		for (int i = 0; i < measurand.length(); i++) {
 			String metricId = measurand.getJSONObject(i).getString("metricId").toString();
-			Measurand m;
+			String metricText = measurand.getJSONObject(i).getString("metricText").toString();
+			Measurand m = repository.findByMetricId(metricId);
 			SmartMeter sm = smRepository.findByName(smartmeter);
-			if (repository.findByMetricId(metricId) == null) {
-				m = new Measurand(metricId, sm);
-			} else {
-				m = repository.findByMetricId(metricId);
-				m.addToSmartMeterList(sm);
+			if (m == null)
+				m = new Measurand(metricId, metricText, sm);
+			else {
+				if (!m.getSmartmeter().contains(sm))
+					m.addToSmartMeterList(sm);
 			}
 			repository.save(m);
 		}
